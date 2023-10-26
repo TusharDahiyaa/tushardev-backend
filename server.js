@@ -12,6 +12,7 @@ const createUser = require(path.join(
 
 app.use(express.json());
 app.use(cors()); //ACCESS from everywhere
+app.use(express.static(path.join(__dirname, "/public")));
 
 mongoose
   .connect(dbConfig.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -21,6 +22,10 @@ mongoose
   .catch((err) => {
     console.log("Error: " + err);
   });
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 app.post("/signUp", createUser.saveUser);
 app.listen(PORT, () => {
